@@ -1,11 +1,12 @@
--- lists all shows from hbtn_0d_tvshows_rate by their rating.
--- Each record should display: tv_shows.title - rating sum
--- Results must be sorted in acending order by the rating
--- The database name will be passed as an argument of the mysql command
-
-SELECT tv_shows.title, SUM(tv_show_ratings.rate) AS rating
+-- lists all shows without the genre Comedy in the database hbtn_0d_tvshows
+-- uses a database to list all rows not linked to one row
+SELECT title
 FROM tv_shows
-INNER JOIN tv_show_ratings
-ON tv_shows.id = tv_show_ratings.show_id
-GROUP BY tv_shows.id
-ORDER BY rating DESC;
+WHERE title NOT IN
+(SELECT title
+FROM tv_shows
+LEFT JOIN tv_show_genres ON tv_shows.id = tv_show_genres.show_id
+LEFT JOIN tv_genres ON tv_show_genres.genre_id = tv_genres.id
+WHERE tv_genres.name = 'Comedy')
+GROUP BY title
+ORDER BY title ASC;
